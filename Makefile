@@ -1,10 +1,17 @@
 COUNT_SCRIPT=wordcount.py
+TXT_FILES=$(wildcard books/*.txt)
+DAT_FILES=$(patsubst books/%.txt, %.dat, $(TXT_FILES))
 
-analysis.zip : *.dat $(COUNT_SCRIPT)
+analysis.zip : $(DAT_FILES) $(COUNT_SCRIPT)
 	zip $@ $^
 
 .PHONY : dats
-dats : isles.dat abyss.dat last.dat
+dats : $(DAT_FILES)
+
+.PHONY : variables
+variables:
+	@echo TXT_FILES: $(TXT_FILES)
+	@echo DAT_FILES: $(DAT_FILES)
 
 
 # count words
@@ -14,5 +21,5 @@ dats : isles.dat abyss.dat last.dat
 
 .PHONY : clean
 clean :
-	rm -f *.dat
-	rm -f *.zip
+	rm -f $(DAT_FILES)
+	rm -f analysis.zip
